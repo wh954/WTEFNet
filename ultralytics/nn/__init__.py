@@ -1,6 +1,6 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
-from .modules.wtefnet import BackboneNet
 from .modules.select import Select
+from .modules.wtefnet import BackboneNet
 from .tasks import (
     BaseModel,
     ClassificationModel,
@@ -14,8 +14,6 @@ from .tasks import (
     torch_safe_load,
     yaml_model_load,
 )
-
-
 
 __all__ = (
     "attempt_load_one_weight",

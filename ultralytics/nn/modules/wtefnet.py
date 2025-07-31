@@ -7,7 +7,7 @@ from .model import Finetunemodel
 
 class DCAM(nn.Module):
     def __init__(self, in_channels, reduction=16):
-        super(DCAM, self).__init__()
+        super().__init__()
         hidden_dim = max(1, in_channels // reduction)
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.max_pool = nn.AdaptiveMaxPool2d(1)
@@ -15,7 +15,7 @@ class DCAM(nn.Module):
         self.shared_mlp = nn.Sequential(
             nn.Linear(in_channels, hidden_dim, bias=False),
             nn.LeakyReLU(inplace=True),
-            nn.Linear(hidden_dim, in_channels, bias=False)
+            nn.Linear(hidden_dim, in_channels, bias=False),
         )
 
         self.sigmoid = nn.Sigmoid()
@@ -32,7 +32,7 @@ class DCAM(nn.Module):
 
 class ConvPReLU(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=3, padding=1):
-        super(ConvPReLU, self).__init__()
+        super().__init__()
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, padding=padding, bias=True)
         self.prelu = nn.PReLU(out_channels)
 
@@ -41,28 +41,24 @@ class ConvPReLU(nn.Module):
         x = self.prelu(x)
         return x
 
+
 class MSConv(nn.Module):
     def __init__(self, in_channels, out_channels):
-        super(MSConv, self).__init__()
+        super().__init__()
         self.branch1 = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=1, padding=0),
-            nn.LeakyReLU(inplace=True)
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, padding=0), nn.LeakyReLU(inplace=True)
         )
         self.branch2 = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1),
-            nn.LeakyReLU(inplace=True)
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1), nn.LeakyReLU(inplace=True)
         )
         self.branch3 = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=5, padding=2),
-            nn.LeakyReLU(inplace=True)
+            nn.Conv2d(in_channels, out_channels, kernel_size=5, padding=2), nn.LeakyReLU(inplace=True)
         )
         self.branch4 = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=7, padding=3),
-            nn.LeakyReLU(inplace=True)
+            nn.Conv2d(in_channels, out_channels, kernel_size=7, padding=3), nn.LeakyReLU(inplace=True)
         )
         self.conv_out = nn.Sequential(
-            nn.Conv2d(out_channels * 4, out_channels, kernel_size=1),
-            nn.LeakyReLU(inplace=True)
+            nn.Conv2d(out_channels * 4, out_channels, kernel_size=1), nn.LeakyReLU(inplace=True)
         )
 
     def forward(self, x):
@@ -75,20 +71,18 @@ class MSConv(nn.Module):
         return out
 
 
-
-
-
-
 class DWT(nn.Module):
     def __init__(self):
         super().__init__()
-        w = torch.tensor([
-            [[0.5, 0.5], [0.5, 0.5]],
-            [[0.5, 0.5], [-0.5, -0.5]],
-            [[0.5, -0.5], [0.5, -0.5]],
-            [[0.5, -0.5], [-0.5, 0.5]]
-        ]).float()
-        self.register_buffer('filters', w.unsqueeze(1))
+        w = torch.tensor(
+            [
+                [[0.5, 0.5], [0.5, 0.5]],
+                [[0.5, 0.5], [-0.5, -0.5]],
+                [[0.5, -0.5], [0.5, -0.5]],
+                [[0.5, -0.5], [-0.5, 0.5]],
+            ]
+        ).float()
+        self.register_buffer("filters", w.unsqueeze(1))
 
     def forward(self, x):
         B, C, H, W = x.shape
@@ -100,12 +94,17 @@ class DWT(nn.Module):
 class IDWT(nn.Module):
     def __init__(self):
         super().__init__()
-        self.register_buffer('filters', torch.tensor([
-            [[0.5, 0.5], [0.5, 0.5]],    # LL
-            [[0.5, 0.5], [-0.5, -0.5]],  # LH
-            [[0.5, -0.5], [0.5, -0.5]],  # HL
-            [[0.5, -0.5], [-0.5, 0.5]]   # HH
-        ]).float())  # [4, 2, 2]
+        self.register_buffer(
+            "filters",
+            torch.tensor(
+                [
+                    [[0.5, 0.5], [0.5, 0.5]],  # LL
+                    [[0.5, 0.5], [-0.5, -0.5]],  # LH
+                    [[0.5, -0.5], [0.5, -0.5]],  # HL
+                    [[0.5, -0.5], [-0.5, 0.5]],  # HH
+                ]
+            ).float(),
+        )  # [4, 2, 2]
 
     def forward(self, x):
         B, C4, H, W = x.shape
@@ -116,33 +115,20 @@ class IDWT(nn.Module):
         for b in range(B):
             for c in range(C):
                 bands = x[b, c]
-                recon = sum([
-                    F.conv_transpose2d(
-                        bands[i][None, None, :, :],
-                        filters[i][None, None, :, :],
-                        stride=2
-                    )[0, 0] for i in range(4)
-                ])
+                recon = sum(
+                    [
+                        F.conv_transpose2d(bands[i][None, None, :, :], filters[i][None, None, :, :], stride=2)[0, 0]
+                        for i in range(4)
+                    ]
+                )
                 out_list.append(recon)
-        out = torch.stack(out_list, dim=0).view(B, C, H*2, W*2)
+        out = torch.stack(out_list, dim=0).view(B, C, H * 2, W * 2)
         return out
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class SAM(nn.Module):
     def __init__(self, kernel_size=7):
-        super(SAM, self).__init__()
+        super().__init__()
         padding = kernel_size // 2
         self.conv = nn.Conv2d(2, 1, kernel_size, padding=padding, bias=False)
         self.sigmoid = nn.Sigmoid()
@@ -155,10 +141,9 @@ class SAM(nn.Module):
         return x * attention
 
 
-
 class YOLOHead(nn.Module):
     def __init__(self, in_channels, num_classes, num_anchors=1):
-        super(YOLOHead, self).__init__()
+        super().__init__()
         self.num_outputs = num_anchors * (5 + num_classes)
         self.conv = nn.Conv2d(in_channels, self.num_outputs, kernel_size=1)
 
@@ -168,8 +153,16 @@ class YOLOHead(nn.Module):
 
 
 class BackboneNet(nn.Module):
-    def __init__(self, in_channels=3, base_channels=8, num_classes=7, *args,
-                 sci_weights="nn/modules/SCI/weights/finetuned_epoch10.pt", freeze_sci=False, **kwargs):
+    def __init__(
+        self,
+        in_channels=3,
+        base_channels=8,
+        num_classes=7,
+        *args,
+        sci_weights="nn/modules/SCI/weights/finetuned_epoch10.pt",
+        freeze_sci=False,
+        **kwargs,
+    ):
         super().__init__()
         # 输入 [B,3,256,256]
         self.sci = Finetunemodel(sci_weights)
@@ -215,25 +208,25 @@ class BackboneNet(nn.Module):
 
         x_2 = self.cat_conv(torch.cat([x_conv1, x_idwt1], dim=1))
 
-        x_dcam2 = self.dcam2(x_2)              # [B,8,128,128]
+        x_dcam2 = self.dcam2(x_2)  # [B,8,128,128]
 
-        x_idwt2 = self.idwt2(x_dcam2)          # [B,2,256,256]
+        x_idwt2 = self.idwt2(x_dcam2)  # [B,2,256,256]
 
         x_fusecat = torch.cat([x, x_idwt2], dim=1)  # [B,5,256,256]
 
-        left = self.left_conv1(x_fusecat)      # [B,3,256,256]
+        left = self.left_conv1(x_fusecat)  # [B,3,256,256]
 
-        left = self.left_dcam1(left)           # [B,3,256,256]
+        left = self.left_dcam1(left)  # [B,3,256,256]
 
-        right1 = self.right_conv1(x_fusecat)   # [B,3,256,256]
+        right1 = self.right_conv1(x_fusecat)  # [B,3,256,256]
 
-        right2 = self.right_dcam1(right1)      # [B,3,256,256]
+        right2 = self.right_dcam1(right1)  # [B,3,256,256]
 
-        right3 = right1 + right2               # [B,3,256,256]
+        right3 = right1 + right2  # [B,3,256,256]
 
-        right4 = self.sam(right3)              # [B,3,256,256]
+        right4 = self.sam(right3)  # [B,3,256,256]
 
-        right5 = x - right4                    # [B,3,256,256]
+        right5 = x - right4  # [B,3,256,256]
 
         Final = left + right5
         # [B,3,256,256]
@@ -255,18 +248,21 @@ class BackboneNet(nn.Module):
         #     print(f'[DEBUG] {len(debug_imgs)} images saved to {save_dir}')
         return Final
 
+
 # 测试
+
 
 def main():
     net = BackboneNet().cuda().eval()
 
-    dummy = torch.rand(1, 3, 256, 256, device='cuda')
+    dummy = torch.rand(1, 3, 256, 256, device="cuda")
     with torch.no_grad():
         out = net(dummy)
 
-    print(f'out: {out.shape}')
+    print(f"out: {out.shape}")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
 
 # class DummyDetectHead(nn.Module):
