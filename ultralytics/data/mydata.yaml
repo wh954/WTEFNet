@@ -1,0 +1,17 @@
+# Ultralytics YOLO 🚀, AGPL-3.0 license
+# COCO128 dataset https://www.kaggle.com/ultralytics/coco128 (first 128 images from COCO train2017) by Ultralytics
+
+train: /home/signal/PycharmProjects/det/real/dataset/output/images/train
+val: /home/signal/PycharmProjects/det/real/dataset/output/images/val
+test: /home/signal/PycharmProjects/det/real/dataset/output/images/test
+
+nc: 7  # number of classes
+
+names:
+  0: pedestrian
+  1: car
+  2: truck
+  3: bus
+  4: bicycle
+  5: traffic light
+  6: traffic sign
