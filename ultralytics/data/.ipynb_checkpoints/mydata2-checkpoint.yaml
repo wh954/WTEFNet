@@ -1,0 +1,12 @@
+# Ultralytics YOLO 🚀, AGPL-3.0 license
+# COCO128 dataset https://www.kaggle.com/ultralytics/coco128 (first 128 images from COCO train2017) by Ultralytics
+
+train: /root/ultralytics-main/ultralytics/fish/images/train
+val: /root/ultralytics-main/ultralytics/fish/images/val
+test: /root/ultralytics-main/ultralytics/fish/images/test
+
+nc: 2  # number of classes
+
+names:
+  31: Acipenser dabryanus
+  32: Myxocyprinus asiaticus

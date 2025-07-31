@@ -1,0 +1,43 @@
+# Ultralytics YOLO 🚀, AGPL-3.0 license
+# COCO128 dataset https://www.kaggle.com/ultralytics/coco128 (first 128 images from COCO train2017) by Ultralytics
+
+train: /root/ultralytics-main/ultralytics/data98989/images/train
+val: /root/ultralytics-main/ultralytics/data98989/images/val
+test: /root/ultralytics-main/ultralytics/data98989/images/test
+
+nc: 33  # number of classes
+
+names:
+  0: Catfish
+  1: Perch
+  2: Goby
+  3: Grass Carp
+  4: Silver Carp
+  5: Silver Barb
+  6: Pangasius
+  7: Tilapia
+  8: Mullet
+  9: Climbing Perch
+  10: Indo-Pacific Tarpon
+  11: Janitor Fish
+  12: Black Spotted Barb
+  13: Knifefish
+  14: Bangus
+  15: Big Head Carp
+  16: Jaguar Gapote
+  17: Mudfish
+  18: Indian Carp
+  19: Gold Fish
+  20: Fourfinger Threadfish
+  21: Freshwater Eel
+  22: Glass Perchlet
+  23: Gourami
+  24: Green Spotted Puffer
+  25: Long-Snouted Pipefish
+  26: Mosquito Fish
+  27: Snakehead
+  28: Scat Fish
+  29: Silver Perch
+  30: Tenpounder
+  31: Acipenser dabryanus
+  32: Myxocyprinus asiaticus
