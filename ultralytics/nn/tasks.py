@@ -63,6 +63,7 @@ from ultralytics.nn.modules import (
     RTDETRDecoder,
     SCDown,
     Segment,
+    Select,
     TorchVision,
     WorldDetect,
     YOLOEDetect,
@@ -79,7 +80,6 @@ from ultralytics.utils.loss import (
     v8PoseLoss,
     v8SegmentationLoss,
 )
-from ultralytics.nn.modules import Select
 from ultralytics.utils.ops import make_divisible
 from ultralytics.utils.plotting import feature_visualization
 from ultralytics.utils.torch_utils import (
@@ -92,7 +92,9 @@ from ultralytics.utils.torch_utils import (
     smart_inference_mode,
     time_sync,
 )
+
 from .modules.wtefnet import BackboneNet
+
 
 class BaseModel(torch.nn.Module):
     """
@@ -1644,8 +1646,7 @@ def parse_model(d, ch, verbose=True):
             C2fCIB,
             A2C2f,
             BackboneNet,
-
-            Select
+            Select,
         }
     )
     repeat_modules = frozenset(  # modules with 'repeat' arguments
