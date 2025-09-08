@@ -1,7 +1,7 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 import numpy as np
 import torch
@@ -84,7 +84,7 @@ class PoseValidator(DetectionValidator):
                 "See https://github.com/ultralytics/ultralytics/issues/4031."
             )
 
-    def preprocess(self, batch: Dict[str, Any]) -> Dict[str, Any]:
+    def preprocess(self, batch: dict[str, Any]) -> dict[str, Any]:
         """Preprocess batch by converting keypoints data to float and moving it to the device."""
         batch = super().preprocess(batch)
         batch["keypoints"] = batch["keypoints"].to(self.device).float()
@@ -120,7 +120,7 @@ class PoseValidator(DetectionValidator):
         self.sigma = OKS_SIGMA if is_pose else np.ones(nkpt) / nkpt
         self.stats = dict(tp_p=[], tp=[], conf=[], pred_cls=[], target_cls=[], target_img=[])
 
-    def _prepare_batch(self, si: int, batch: Dict[str, Any]) -> Dict[str, Any]:
+    def _prepare_batch(self, si: int, batch: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare a batch for processing by converting keypoints to float and scaling to original dimensions.
 
@@ -145,7 +145,7 @@ class PoseValidator(DetectionValidator):
         pbatch["kpts"] = kpts
         return pbatch
 
-    def _prepare_pred(self, pred: torch.Tensor, pbatch: Dict[str, Any]) -> Tuple[torch.Tensor, torch.Tensor]:
+    def _prepare_pred(self, pred: torch.Tensor, pbatch: dict[str, Any]) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Prepare and scale keypoints in predictions for pose processing.
 
@@ -170,7 +170,7 @@ class PoseValidator(DetectionValidator):
         ops.scale_coords(pbatch["imgsz"], pred_kpts, pbatch["ori_shape"], ratio_pad=pbatch["ratio_pad"])
         return predn, pred_kpts
 
-    def update_metrics(self, preds: List[torch.Tensor], batch: Dict[str, Any]) -> None:
+    def update_metrics(self, preds: list[torch.Tensor], batch: dict[str, Any]) -> None:
         """
         Update metrics with new predictions and ground truth data.
 
@@ -270,7 +270,7 @@ class PoseValidator(DetectionValidator):
 
         return self.match_predictions(detections[:, 5], gt_cls, iou)
 
-    def plot_val_samples(self, batch: Dict[str, Any], ni: int) -> None:
+    def plot_val_samples(self, batch: dict[str, Any], ni: int) -> None:
         """
         Plot and save validation set samples with ground truth bounding boxes and keypoints.
 
@@ -296,7 +296,7 @@ class PoseValidator(DetectionValidator):
             on_plot=self.on_plot,
         )
 
-    def plot_predictions(self, batch: Dict[str, Any], preds: List[torch.Tensor], ni: int) -> None:
+    def plot_predictions(self, batch: dict[str, Any], preds: list[torch.Tensor], ni: int) -> None:
         """
         Plot and save model predictions with bounding boxes and keypoints.
 
@@ -325,7 +325,7 @@ class PoseValidator(DetectionValidator):
         predn: torch.Tensor,
         pred_kpts: torch.Tensor,
         save_conf: bool,
-        shape: Tuple[int, int],
+        shape: tuple[int, int],
         file: Path,
     ) -> None:
         """
@@ -386,7 +386,7 @@ class PoseValidator(DetectionValidator):
                 }
             )
 
-    def eval_json(self, stats: Dict[str, Any]) -> Dict[str, Any]:
+    def eval_json(self, stats: dict[str, Any]) -> dict[str, Any]:
         """Evaluate object detection model using COCO JSON format."""
         if self.args.save_json and self.is_coco and len(self.jdict):
             anno_json = self.data["path"] / "annotations/person_keypoints_val2017.json"  # annotations

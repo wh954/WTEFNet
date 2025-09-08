@@ -1,7 +1,7 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
 
 from pathlib import Path
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Union
 
 import torch
 
@@ -92,7 +92,7 @@ class OBBValidator(DetectionValidator):
         iou = batch_probiou(gt_bboxes, torch.cat([detections[:, :4], detections[:, -1:]], dim=-1))
         return self.match_predictions(detections[:, 5], gt_cls, iou)
 
-    def _prepare_batch(self, si: int, batch: Dict) -> Dict:
+    def _prepare_batch(self, si: int, batch: dict) -> dict:
         """
         Prepare batch data for OBB validation with proper scaling and formatting.
 
@@ -120,7 +120,7 @@ class OBBValidator(DetectionValidator):
             ops.scale_boxes(imgsz, bbox, ori_shape, ratio_pad=ratio_pad, xywh=True)  # native-space labels
         return {"cls": cls, "bbox": bbox, "ori_shape": ori_shape, "imgsz": imgsz, "ratio_pad": ratio_pad}
 
-    def _prepare_pred(self, pred: torch.Tensor, pbatch: Dict[str, Any]) -> torch.Tensor:
+    def _prepare_pred(self, pred: torch.Tensor, pbatch: dict[str, Any]) -> torch.Tensor:
         """
         Prepare predictions by scaling bounding boxes to original image dimensions.
 
@@ -143,7 +143,7 @@ class OBBValidator(DetectionValidator):
         )  # native-space pred
         return predn
 
-    def plot_predictions(self, batch: Dict[str, Any], preds: List[torch.Tensor], ni: int) -> None:
+    def plot_predictions(self, batch: dict[str, Any], preds: list[torch.Tensor], ni: int) -> None:
         """
         Plot predicted bounding boxes on input images and save the result.
 
@@ -197,7 +197,7 @@ class OBBValidator(DetectionValidator):
             )
 
     def save_one_txt(
-        self, predn: torch.Tensor, save_conf: bool, shape: Tuple[int, int], file: Union[Path, str]
+        self, predn: torch.Tensor, save_conf: bool, shape: tuple[int, int], file: Union[Path, str]
     ) -> None:
         """
         Save YOLO OBB detections to a text file in normalized coordinates.
@@ -228,7 +228,7 @@ class OBBValidator(DetectionValidator):
             obb=obb,
         ).save_txt(file, save_conf=save_conf)
 
-    def eval_json(self, stats: Dict[str, Any]) -> Dict[str, Any]:
+    def eval_json(self, stats: dict[str, Any]) -> dict[str, Any]:
         """
         Evaluate YOLO output in JSON format and save predictions in DOTA format.
 

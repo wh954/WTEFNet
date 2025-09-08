@@ -3,7 +3,7 @@
 
 import time
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional
 
 import cv2
 import numpy as np
@@ -40,7 +40,7 @@ def imread(filename: str, flags: int = cv2.IMREAD_COLOR) -> Optional[np.ndarray]
         return im[..., None] if im.ndim == 2 else im  # Always ensure 3 dimensions
 
 
-def imwrite(filename: str, img: np.ndarray, params: Optional[List[int]] = None) -> bool:
+def imwrite(filename: str, img: np.ndarray, params: Optional[list[int]] = None) -> bool:
     """
     Write an image to a file with multilanguage filename support.
 
