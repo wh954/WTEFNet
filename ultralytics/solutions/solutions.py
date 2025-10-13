@@ -2,7 +2,7 @@
 
 import math
 from collections import defaultdict
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 import cv2
 import numpy as np
@@ -322,8 +322,8 @@ class SolutionAnnotator(Annotator):
 
     def draw_region(
         self,
-        reg_pts: Optional[List[Tuple[int, int]]] = None,
-        color: Tuple[int, int, int] = (0, 255, 0),
+        reg_pts: Optional[list[tuple[int, int]]] = None,
+        color: tuple[int, int, int] = (0, 255, 0),
         thickness: int = 5,
     ):
         """
@@ -343,9 +343,9 @@ class SolutionAnnotator(Annotator):
     def queue_counts_display(
         self,
         label: str,
-        points: Optional[List[Tuple[int, int]]] = None,
-        region_color: Tuple[int, int, int] = (255, 255, 255),
-        txt_color: Tuple[int, int, int] = (0, 0, 0),
+        points: Optional[list[tuple[int, int]]] = None,
+        region_color: tuple[int, int, int] = (255, 255, 255),
+        txt_color: tuple[int, int, int] = (0, 0, 0),
     ):
         """
         Display queue counts on an image centered at the points with customizable font size and colors.
@@ -389,9 +389,9 @@ class SolutionAnnotator(Annotator):
     def display_analytics(
         self,
         im0: np.ndarray,
-        text: Dict[str, Any],
-        txt_color: Tuple[int, int, int],
-        bg_color: Tuple[int, int, int],
+        text: dict[str, Any],
+        txt_color: tuple[int, int, int],
+        bg_color: tuple[int, int, int],
         margin: int,
     ):
         """
@@ -423,7 +423,7 @@ class SolutionAnnotator(Annotator):
             text_y_offset = rect_y2
 
     @staticmethod
-    def estimate_pose_angle(a: List[float], b: List[float], c: List[float]) -> float:
+    def estimate_pose_angle(a: list[float], b: list[float], c: list[float]) -> float:
         """
         Calculate the angle between three points for workout monitoring.
 
@@ -441,8 +441,8 @@ class SolutionAnnotator(Annotator):
 
     def draw_specific_kpts(
         self,
-        keypoints: List[List[float]],
-        indices: Optional[List[int]] = None,
+        keypoints: list[list[float]],
+        indices: Optional[list[int]] = None,
         radius: int = 2,
         conf_thresh: float = 0.25,
     ) -> np.ndarray:
@@ -478,9 +478,9 @@ class SolutionAnnotator(Annotator):
     def plot_workout_information(
         self,
         display_text: str,
-        position: Tuple[int, int],
-        color: Tuple[int, int, int] = (104, 31, 17),
-        txt_color: Tuple[int, int, int] = (255, 255, 255),
+        position: tuple[int, int],
+        color: tuple[int, int, int] = (104, 31, 17),
+        txt_color: tuple[int, int, int] = (255, 255, 255),
     ) -> int:
         """
         Draw workout text with a background on the image.
@@ -514,9 +514,9 @@ class SolutionAnnotator(Annotator):
         angle_text: str,
         count_text: str,
         stage_text: str,
-        center_kpt: List[int],
-        color: Tuple[int, int, int] = (104, 31, 17),
-        txt_color: Tuple[int, int, int] = (255, 255, 255),
+        center_kpt: list[int],
+        color: tuple[int, int, int] = (104, 31, 17),
+        txt_color: tuple[int, int, int] = (255, 255, 255),
     ):
         """
         Plot the pose angle, count value, and step stage for workout monitoring.
@@ -546,9 +546,9 @@ class SolutionAnnotator(Annotator):
     def plot_distance_and_line(
         self,
         pixels_distance: float,
-        centroids: List[Tuple[int, int]],
-        line_color: Tuple[int, int, int] = (104, 31, 17),
-        centroid_color: Tuple[int, int, int] = (255, 0, 255),
+        centroids: list[tuple[int, int]],
+        line_color: tuple[int, int, int] = (104, 31, 17),
+        centroid_color: tuple[int, int, int] = (255, 0, 255),
     ):
         """
         Plot the distance and line between two centroids on the frame.
@@ -587,8 +587,8 @@ class SolutionAnnotator(Annotator):
         self,
         im0: np.ndarray,
         text: str,
-        txt_color: Tuple[int, int, int],
-        bg_color: Tuple[int, int, int],
+        txt_color: tuple[int, int, int],
+        bg_color: tuple[int, int, int],
         x_center: float,
         y_center: float,
         margin: int,
@@ -637,8 +637,8 @@ class SolutionAnnotator(Annotator):
         line_x: int = 0,
         line_y: int = 0,
         label: Optional[str] = None,
-        color: Tuple[int, int, int] = (221, 0, 186),
-        txt_color: Tuple[int, int, int] = (255, 255, 255),
+        color: tuple[int, int, int] = (221, 0, 186),
+        txt_color: tuple[int, int, int] = (255, 255, 255),
     ):
         """
         Draw a sweep annotation line and an optional label.
@@ -675,10 +675,10 @@ class SolutionAnnotator(Annotator):
 
     def visioneye(
         self,
-        box: List[float],
-        center_point: Tuple[int, int],
-        color: Tuple[int, int, int] = (235, 219, 11),
-        pin_color: Tuple[int, int, int] = (255, 0, 255),
+        box: list[float],
+        center_point: tuple[int, int],
+        color: tuple[int, int, int] = (235, 219, 11),
+        pin_color: tuple[int, int, int] = (255, 0, 255),
     ):
         """
         Perform pinpoint human-vision eye mapping and plotting.
@@ -696,10 +696,10 @@ class SolutionAnnotator(Annotator):
 
     def circle_label(
         self,
-        box: Tuple[float, float, float, float],
+        box: tuple[float, float, float, float],
         label: str = "",
-        color: Tuple[int, int, int] = (128, 128, 128),
-        txt_color: Tuple[int, int, int] = (255, 255, 255),
+        color: tuple[int, int, int] = (128, 128, 128),
+        txt_color: tuple[int, int, int] = (255, 255, 255),
         margin: int = 2,
     ):
         """
@@ -741,10 +741,10 @@ class SolutionAnnotator(Annotator):
 
     def text_label(
         self,
-        box: Tuple[float, float, float, float],
+        box: tuple[float, float, float, float],
         label: str = "",
-        color: Tuple[int, int, int] = (128, 128, 128),
-        txt_color: Tuple[int, int, int] = (255, 255, 255),
+        color: tuple[int, int, int] = (128, 128, 128),
+        txt_color: tuple[int, int, int] = (255, 255, 255),
         margin: int = 5,
     ):
         """

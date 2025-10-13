@@ -89,6 +89,7 @@ from .head import (
     YOLOESegment,
     v10Detect,
 )
+from .select import Select
 from .transformer import (
     AIFI,
     MLP,
@@ -101,7 +102,7 @@ from .transformer import (
     TransformerEncoderLayer,
     TransformerLayer,
 )
-from .select import Select
+
 globals()["Select"] = Select
 __all__ = (
     "Conv",
@@ -180,5 +181,5 @@ __all__ = (
     "TorchVision",
     "Index",
     "A2C2f",
-    "Select"
+    "Select",
 )

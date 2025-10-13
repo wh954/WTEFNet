@@ -2,7 +2,7 @@
 
 from multiprocessing.pool import ThreadPool
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 import numpy as np
 import torch
@@ -52,7 +52,7 @@ class SegmentationValidator(DetectionValidator):
         self.args.task = "segment"
         self.metrics = SegmentMetrics(save_dir=self.save_dir)
 
-    def preprocess(self, batch: Dict[str, Any]) -> Dict[str, Any]:
+    def preprocess(self, batch: dict[str, Any]) -> dict[str, Any]:
         """
         Preprocess batch of images for YOLO segmentation validation.
 
@@ -97,7 +97,7 @@ class SegmentationValidator(DetectionValidator):
             "mAP50-95)",
         )
 
-    def postprocess(self, preds: List[torch.Tensor]) -> Tuple[List[torch.Tensor], torch.Tensor]:
+    def postprocess(self, preds: list[torch.Tensor]) -> tuple[list[torch.Tensor], torch.Tensor]:
         """
         Post-process YOLO predictions and return output detections with proto.
 
@@ -112,7 +112,7 @@ class SegmentationValidator(DetectionValidator):
         proto = preds[1][-1] if len(preds[1]) == 3 else preds[1]  # second output is len 3 if pt, but only 1 if exported
         return p, proto
 
-    def _prepare_batch(self, si: int, batch: Dict[str, Any]) -> Dict[str, Any]:
+    def _prepare_batch(self, si: int, batch: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare a batch for training or inference by processing images and targets.
 
@@ -129,8 +129,8 @@ class SegmentationValidator(DetectionValidator):
         return prepared_batch
 
     def _prepare_pred(
-        self, pred: torch.Tensor, pbatch: Dict[str, Any], proto: torch.Tensor
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        self, pred: torch.Tensor, pbatch: dict[str, Any], proto: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Prepare predictions for evaluation by processing bounding boxes and masks.
 
@@ -147,7 +147,7 @@ class SegmentationValidator(DetectionValidator):
         pred_masks = self.process(proto, pred[:, 6:], pred[:, :4], shape=pbatch["imgsz"])
         return predn, pred_masks
 
-    def update_metrics(self, preds: Tuple[List[torch.Tensor], torch.Tensor], batch: Dict[str, Any]) -> None:
+    def update_metrics(self, preds: tuple[list[torch.Tensor], torch.Tensor], batch: dict[str, Any]) -> None:
         """
         Update metrics with the current batch predictions and targets.
 
@@ -277,7 +277,7 @@ class SegmentationValidator(DetectionValidator):
 
         return self.match_predictions(detections[:, 5], gt_cls, iou)
 
-    def plot_val_samples(self, batch: Dict[str, Any], ni: int) -> None:
+    def plot_val_samples(self, batch: dict[str, Any], ni: int) -> None:
         """
         Plot validation samples with bounding box labels and masks.
 
@@ -297,7 +297,7 @@ class SegmentationValidator(DetectionValidator):
             on_plot=self.on_plot,
         )
 
-    def plot_predictions(self, batch: Dict[str, Any], preds: List[torch.Tensor], ni: int) -> None:
+    def plot_predictions(self, batch: dict[str, Any], preds: list[torch.Tensor], ni: int) -> None:
         """
         Plot batch predictions with masks and bounding boxes.
 
@@ -318,7 +318,7 @@ class SegmentationValidator(DetectionValidator):
         self.plot_masks.clear()
 
     def save_one_txt(
-        self, predn: torch.Tensor, pred_masks: torch.Tensor, save_conf: bool, shape: Tuple[int, int], file: Path
+        self, predn: torch.Tensor, pred_masks: torch.Tensor, save_conf: bool, shape: tuple[int, int], file: Path
     ) -> None:
         """
         Save YOLO detections to a txt file in normalized coordinates in a specific format.
@@ -378,7 +378,7 @@ class SegmentationValidator(DetectionValidator):
                 }
             )
 
-    def eval_json(self, stats: Dict[str, Any]) -> Dict[str, Any]:
+    def eval_json(self, stats: dict[str, Any]) -> dict[str, Any]:
         """Return COCO-style instance segmentation evaluation metrics."""
         if self.args.save_json and (self.is_lvis or self.is_coco) and len(self.jdict):
             pred_json = self.save_dir / "predictions.json"  # predictions

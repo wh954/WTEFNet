@@ -3,7 +3,7 @@
 import math
 import warnings
 from pathlib import Path
-from typing import Callable, Dict, List, Optional, Union
+from typing import Callable, Optional, Union
 
 import cv2
 import numpy as np
@@ -685,9 +685,9 @@ def plot_images(
     confs: Optional[Union[torch.Tensor, np.ndarray]] = None,
     masks: Union[torch.Tensor, np.ndarray] = np.zeros(0, dtype=np.uint8),
     kpts: Union[torch.Tensor, np.ndarray] = np.zeros((0, 51), dtype=np.float32),
-    paths: Optional[List[str]] = None,
+    paths: Optional[list[str]] = None,
     fname: str = "images.jpg",
-    names: Optional[Dict[int, str]] = None,
+    names: Optional[dict[int, str]] = None,
     on_plot: Optional[Callable] = None,
     max_size: int = 1920,
     max_subplots: int = 16,
