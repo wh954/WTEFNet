@@ -1,9 +1,9 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+from __future__ import annotations
 
 import math
 import random
 from copy import copy
-from typing import Dict, List, Optional
 
 import numpy as np
 import torch.nn as nn
@@ -50,7 +50,7 @@ class DetectionTrainer(BaseTrainer):
         >>> trainer.train()
     """
 
-    def build_dataset(self, img_path: str, mode: str = "train", batch: Optional[int] = None):
+    def build_dataset(self, img_path: str, mode: str = "train", batch: int | None = None):
         """
         Build YOLO Dataset for training or validation.
 
@@ -88,7 +88,7 @@ class DetectionTrainer(BaseTrainer):
         workers = self.args.workers if mode == "train" else self.args.workers * 2
         return build_dataloader(dataset, batch_size, workers, shuffle, rank)  # return dataloader
 
-    def preprocess_batch(self, batch: Dict) -> Dict:
+    def preprocess_batch(self, batch: dict) -> dict:
         """
         Preprocess a batch of images by scaling and converting to float.
 
@@ -126,7 +126,7 @@ class DetectionTrainer(BaseTrainer):
         self.model.args = self.args  # attach hyperparameters to model
         # TODO: self.model.class_weights = labels_to_class_weights(dataset.labels, nc).to(device) * nc
 
-    def get_model(self, cfg: Optional[str] = None, weights: Optional[str] = None, verbose: bool = True):
+    def get_model(self, cfg: str | None = None, weights: str | None = None, verbose: bool = True):
         """
         Return a YOLO detection model.
 
@@ -150,7 +150,7 @@ class DetectionTrainer(BaseTrainer):
             self.test_loader, save_dir=self.save_dir, args=copy(self.args), _callbacks=self.callbacks
         )
 
-    def label_loss_items(self, loss_items: Optional[List[float]] = None, prefix: str = "train"):
+    def label_loss_items(self, loss_items: list[float] | None = None, prefix: str = "train"):
         """
         Return a loss dict with labeled training loss items tensor.
 
@@ -178,7 +178,7 @@ class DetectionTrainer(BaseTrainer):
             "Size",
         )
 
-    def plot_training_samples(self, batch: Dict, ni: int):
+    def plot_training_samples(self, batch: dict, ni: int):
         """
         Plot training samples with their annotations.
 

@@ -1,7 +1,7 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+from __future__ import annotations
 
 import copy
-from typing import Optional
 
 import torch
 from torch import Tensor, nn
@@ -103,7 +103,7 @@ class MemoryAttentionLayer(nn.Module):
         self.pos_enc_at_cross_attn_queries = pos_enc_at_cross_attn_queries
         self.pos_enc_at_cross_attn_keys = pos_enc_at_cross_attn_keys
 
-    def _forward_sa(self, tgt: Tensor, query_pos: Optional[Tensor]) -> Tensor:
+    def _forward_sa(self, tgt: Tensor, query_pos: Tensor | None) -> Tensor:
         """Perform self-attention on input tensor using positional encoding and RoPE attention mechanism."""
         tgt2 = self.norm1(tgt)
         q = k = tgt2 + query_pos if self.pos_enc_at_attn else tgt2
@@ -115,8 +115,8 @@ class MemoryAttentionLayer(nn.Module):
         self,
         tgt: Tensor,
         memory: Tensor,
-        query_pos: Optional[Tensor],
-        pos: Optional[Tensor],
+        query_pos: Tensor | None,
+        pos: Tensor | None,
         num_k_exclude_rope: int = 0,
     ) -> Tensor:
         """Perform cross-attention between target and memory tensors using RoPEAttention mechanism."""
@@ -140,8 +140,8 @@ class MemoryAttentionLayer(nn.Module):
         self,
         tgt: Tensor,
         memory: Tensor,
-        pos: Optional[Tensor] = None,
-        query_pos: Optional[Tensor] = None,
+        pos: Tensor | None = None,
+        query_pos: Tensor | None = None,
         num_k_exclude_rope: int = 0,
     ) -> torch.Tensor:
         """
@@ -242,8 +242,8 @@ class MemoryAttention(nn.Module):
         self,
         curr: torch.Tensor,  # self-attention inputs
         memory: torch.Tensor,  # cross-attention inputs
-        curr_pos: Optional[Tensor] = None,  # pos_enc for self-attention inputs
-        memory_pos: Optional[Tensor] = None,  # pos_enc for cross-attention inputs
+        curr_pos: Tensor | None = None,  # pos_enc for self-attention inputs
+        memory_pos: Tensor | None = None,  # pos_enc for cross-attention inputs
         num_obj_ptr_tokens: int = 0,  # number of object pointer *tokens*
     ) -> torch.Tensor:
         """

@@ -1,8 +1,8 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+from __future__ import annotations
 
 from copy import copy
 from pathlib import Path
-from typing import Dict, Optional, Union
 
 from ultralytics.models import yolo
 from ultralytics.nn.tasks import SegmentationModel
@@ -27,7 +27,7 @@ class SegmentationTrainer(yolo.detect.DetectionTrainer):
         >>> trainer.train()
     """
 
-    def __init__(self, cfg=DEFAULT_CFG, overrides: Optional[Dict] = None, _callbacks=None):
+    def __init__(self, cfg=DEFAULT_CFG, overrides: dict | None = None, _callbacks=None):
         """
         Initialize a SegmentationTrainer object.
 
@@ -50,9 +50,7 @@ class SegmentationTrainer(yolo.detect.DetectionTrainer):
         overrides["task"] = "segment"
         super().__init__(cfg, overrides, _callbacks)
 
-    def get_model(
-        self, cfg: Optional[Union[Dict, str]] = None, weights: Optional[Union[str, Path]] = None, verbose: bool = True
-    ):
+    def get_model(self, cfg: dict | str | None = None, weights: str | Path | None = None, verbose: bool = True):
         """
         Initialize and return a SegmentationModel with specified configuration and weights.
 
@@ -82,7 +80,7 @@ class SegmentationTrainer(yolo.detect.DetectionTrainer):
             self.test_loader, save_dir=self.save_dir, args=copy(self.args), _callbacks=self.callbacks
         )
 
-    def plot_training_samples(self, batch: Dict, ni: int):
+    def plot_training_samples(self, batch: dict, ni: int):
         """
         Plot training sample images with labels, bounding boxes, and masks.
 

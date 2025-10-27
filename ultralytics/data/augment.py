@@ -1,9 +1,12 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+from __future__ import annotations
 
+import functools
 import math
+import operator
 import random
 from copy import deepcopy
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any
 
 import cv2
 import numpy as np
@@ -231,7 +234,7 @@ class Compose:
         """
         self.transforms.insert(index, transform)
 
-    def __getitem__(self, index: Union[list, int]) -> "Compose":
+    def __getitem__(self, index: list | int) -> Compose:
         """
         Retrieve a specific transform or a set of transforms using indexing.
 
@@ -254,7 +257,7 @@ class Compose:
         index = [index] if isinstance(index, int) else index
         return Compose([self.transforms[i] for i in index])
 
-    def __setitem__(self, index: Union[list, int], value: Union[list, int]) -> None:
+    def __setitem__(self, index: list | int, value: list | int) -> None:
         """
         Set one or more transforms in the composition using indexing.
 
@@ -476,7 +479,7 @@ class BaseMixTransform:
         if "texts" not in labels:
             return labels
 
-        mix_texts = sum([labels["texts"]] + [x["texts"] for x in labels["mix_labels"]], [])
+        mix_texts = functools.reduce(operator.iadd, [labels["texts"]] + [x["texts"] for x in labels["mix_labels"]], [])
         mix_texts = list({tuple(x) for x in mix_texts})
         text2id = {text: i for i, text in enumerate(mix_texts)}
 
@@ -1670,7 +1673,7 @@ class LetterBox:
 
         # Compute padding
         ratio = r, r  # width, height ratios
-        new_unpad = int(round(shape[1] * r)), int(round(shape[0] * r))
+        new_unpad = round(shape[1] * r), round(shape[0] * r)
         dw, dh = new_shape[1] - new_unpad[0], new_shape[0] - new_unpad[1]  # wh padding
         if self.auto:  # minimum rectangle
             dw, dh = np.mod(dw, self.stride), np.mod(dh, self.stride)  # wh padding
@@ -1688,8 +1691,8 @@ class LetterBox:
             if img.ndim == 2:
                 img = img[..., None]
 
-        top, bottom = int(round(dh - 0.1)) if self.center else 0, int(round(dh + 0.1))
-        left, right = int(round(dw - 0.1)) if self.center else 0, int(round(dw + 0.1))
+        top, bottom = round(dh - 0.1) if self.center else 0, round(dh + 0.1)
+        left, right = round(dw - 0.1) if self.center else 0, round(dw + 0.1)
         h, w, c = img.shape
         if c == 3:
             img = cv2.copyMakeBorder(img, top, bottom, left, right, cv2.BORDER_CONSTANT, value=(114, 114, 114))
@@ -2372,10 +2375,10 @@ class RandomLoadText:
     def __init__(
         self,
         prompt_format: str = "{}",
-        neg_samples: Tuple[int, int] = (80, 80),
+        neg_samples: tuple[int, int] = (80, 80),
         max_samples: int = 80,
         padding: bool = False,
-        padding_value: List[str] = [""],
+        padding_value: list[str] = [""],
     ) -> None:
         """
         Initialize the RandomLoadText class for randomly sampling positive and negative texts.
@@ -2416,7 +2419,7 @@ class RandomLoadText:
         self.padding = padding
         self.padding_value = padding_value
 
-    def __call__(self, labels: Dict[str, Any]) -> Dict[str, Any]:
+    def __call__(self, labels: dict[str, Any]) -> dict[str, Any]:
         """
         Randomly sample positive and negative texts and update class indices accordingly.
 

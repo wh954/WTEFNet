@@ -1,7 +1,6 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
 
 import argparse
-from typing import List
 
 import cv2
 import numpy as np
@@ -167,7 +166,7 @@ class RTDETR:
         # Return the bounding boxes in (x_min, y_min, x_max, y_max) format
         return np.column_stack((x_min, y_min, x_max, y_max))
 
-    def postprocess(self, model_output: List[np.ndarray]) -> np.ndarray:
+    def postprocess(self, model_output: list[np.ndarray]) -> np.ndarray:
         """
         Postprocess model output to extract and visualize detections.
 

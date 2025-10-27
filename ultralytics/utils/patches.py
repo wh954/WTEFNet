@@ -1,9 +1,10 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
 """Monkey patches to update/extend functionality of existing functions."""
 
+from __future__ import annotations
+
 import time
 from pathlib import Path
-from typing import List, Optional
 
 import cv2
 import numpy as np
@@ -13,7 +14,7 @@ import torch
 _imshow = cv2.imshow  # copy to avoid recursion errors
 
 
-def imread(filename: str, flags: int = cv2.IMREAD_COLOR) -> Optional[np.ndarray]:
+def imread(filename: str, flags: int = cv2.IMREAD_COLOR) -> np.ndarray | None:
     """
     Read an image from a file with multilanguage filename support.
 
@@ -40,7 +41,7 @@ def imread(filename: str, flags: int = cv2.IMREAD_COLOR) -> Optional[np.ndarray]
         return im[..., None] if im.ndim == 2 else im  # Always ensure 3 dimensions
 
 
-def imwrite(filename: str, img: np.ndarray, params: Optional[List[int]] = None) -> bool:
+def imwrite(filename: str, img: np.ndarray, params: list[int] | None = None) -> bool:
     """
     Write an image to a file with multilanguage filename support.
 

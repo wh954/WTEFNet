@@ -1,8 +1,8 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import List
 
 import numpy as np
 import torch
@@ -135,7 +135,7 @@ class VisualAISearch(BaseSolution):
 
         self.LOGGER.info(f"Indexed {len(self.image_paths)} images.")
 
-    def search(self, query: str, k: int = 30, similarity_thresh: float = 0.1) -> List[str]:
+    def search(self, query: str, k: int = 30, similarity_thresh: float = 0.1) -> list[str]:
         """
         Return top-k semantically similar images to the given query.
 
@@ -167,7 +167,7 @@ class VisualAISearch(BaseSolution):
 
         return [r[0] for r in results]
 
-    def __call__(self, query: str) -> List[str]:
+    def __call__(self, query: str) -> list[str]:
         """Direct call interface for the search function."""
         return self.search(query)
 
@@ -195,7 +195,7 @@ class SearchApp:
         >>> app.run(debug=True)
     """
 
-    def __init__(self, data: str = "images", device: str = None):
+    def __init__(self, data: str = "images", device: str | None = None):
         """
         Initialize the SearchApp with VisualAISearch backend.
 
