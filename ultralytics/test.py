@@ -1,7 +1,10 @@
-from ultralytics import YOLO
 import pandas as pd
 
-model = YOLO("/home/signal/PycharmProjects/bdd100k/cover_ultralytics-main/ultralytics/runs/detect/train/weights/best.pt")
+from ultralytics import YOLO
+
+model = YOLO(
+    "/home/signal/PycharmProjects/bdd100k/cover_ultralytics-main/ultralytics/runs/detect/train/weights/best.pt"
+)
 
 
 metrics = model.val(
@@ -9,7 +12,7 @@ metrics = model.val(
     imgsz=640,
     device=0,
     split="test",
-    save_json=True
+    save_json=True,
 )
 
 df = pd.DataFrame(metrics.results_dict, index=[0])
