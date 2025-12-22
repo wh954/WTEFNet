@@ -11,8 +11,7 @@ __all__ = ("RTDETRValidator",)  # tuple or list
 
 
 class RTDETRDataset(YOLODataset):
-    """
-    Real-Time DEtection and TRacking (RT-DETR) dataset class extending the base YOLODataset class.
+    """Real-Time DEtection and TRacking (RT-DETR) dataset class extending the base YOLODataset class.
 
     This specialized dataset class is designed for use with the RT-DETR object detection model and is optimized for
     real-time detection and tracking tasks.
@@ -35,8 +34,7 @@ class RTDETRDataset(YOLODataset):
     """
 
     def __init__(self, *args, data=None, **kwargs):
-        """
-        Initialize the RTDETRDataset class by inheriting from the YOLODataset class.
+        """Initialize the RTDETRDataset class by inheriting from the YOLODataset class.
 
         This constructor sets up a dataset specifically optimized for the RT-DETR (Real-Time DEtection and TRacking)
         model, building upon the base YOLODataset functionality.
@@ -49,8 +47,7 @@ class RTDETRDataset(YOLODataset):
         super().__init__(*args, data=data, **kwargs)
 
     def load_image(self, i, rect_mode=False):
-        """
-        Load one image from dataset index 'i'.
+        """Load one image from dataset index 'i'.
 
         Args:
             i (int): Index of the image to load.
@@ -68,8 +65,7 @@ class RTDETRDataset(YOLODataset):
         return super().load_image(i=i, rect_mode=rect_mode)
 
     def build_transforms(self, hyp=None):
-        """
-        Build transformation pipeline for the dataset.
+        """Build transformation pipeline for the dataset.
 
         Args:
             hyp (dict, optional): Hyperparameters for transformations.
@@ -100,8 +96,7 @@ class RTDETRDataset(YOLODataset):
 
 
 class RTDETRValidator(DetectionValidator):
-    """
-    RTDETRValidator extends the DetectionValidator class to provide validation capabilities specifically tailored for
+    """RTDETRValidator extends the DetectionValidator class to provide validation capabilities specifically tailored for
     the RT-DETR (Real-Time DETR) object detection model.
 
     The class allows building of an RTDETR-specific dataset for validation, applies Non-maximum suppression for
@@ -127,8 +122,7 @@ class RTDETRValidator(DetectionValidator):
     """
 
     def build_dataset(self, img_path, mode="val", batch=None):
-        """
-        Build an RTDETR Dataset.
+        """Build an RTDETR Dataset.
 
         Args:
             img_path (str): Path to the folder containing images.
@@ -152,8 +146,7 @@ class RTDETRValidator(DetectionValidator):
         )
 
     def postprocess(self, preds):
-        """
-        Apply Non-maximum suppression to prediction outputs.
+        """Apply Non-maximum suppression to prediction outputs.
 
         Args:
             preds (list | tuple | torch.Tensor): Raw predictions from the model.
@@ -179,8 +172,7 @@ class RTDETRValidator(DetectionValidator):
         return outputs
 
     def _prepare_batch(self, si, batch):
-        """
-        Prepare a batch for validation by applying necessary transformations.
+        """Prepare a batch for validation by applying necessary transformations.
 
         Args:
             si (int): Batch index.
@@ -202,8 +194,7 @@ class RTDETRValidator(DetectionValidator):
         return {"cls": cls, "bbox": bbox, "ori_shape": ori_shape, "imgsz": imgsz, "ratio_pad": ratio_pad}
 
     def _prepare_pred(self, pred, pbatch):
-        """
-        Prepare predictions by scaling bounding boxes to original image dimensions.
+        """Prepare predictions by scaling bounding boxes to original image dimensions.
 
         Args:
             pred (torch.Tensor): Raw predictions.
