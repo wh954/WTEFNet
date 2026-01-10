@@ -5,7 +5,7 @@ train: /home/signal/PycharmProjects/det/real/dataset/output/images/train
 val: /home/signal/PycharmProjects/det/real/dataset/output/images/val
 test: /home/signal/PycharmProjects/det/real/dataset/output/images/test
 
-nc: 7  # number of classes
+nc: 7 # number of classes
 
 names:
   0: pedestrian
